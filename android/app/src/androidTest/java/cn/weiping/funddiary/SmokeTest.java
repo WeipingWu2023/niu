@@ -31,7 +31,7 @@ public class SmokeTest extends Instrumentation {
         Bundle result=new Bundle();
         try {
             Activity activity=startActivitySync(new Intent().setClassName(getTargetContext(),MainActivity.class.getName()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            runOnMainSync(() -> web=(WebView)((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0));
+            runOnMainSync(() -> web=(WebView)((ViewGroup)((ViewGroup)activity.findViewById(android.R.id.content)).getChildAt(0)).getChildAt(0));
             await("!!document.querySelector('[data-action=fund]')");
             String script=new String(getContext().getAssets().open("smoke.js").readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
             js(script); await("window.__qaResult === 'PASS'");

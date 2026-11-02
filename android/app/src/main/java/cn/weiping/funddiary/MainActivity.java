@@ -24,9 +24,12 @@ public class MainActivity extends Activity {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         web = new WebView(this);
-        setContentView(web);
+        android.widget.FrameLayout root = new android.widget.FrameLayout(this);
+        root.setBackgroundColor(android.graphics.Color.rgb(135,42,48));
+        root.addView(web,new android.widget.FrameLayout.LayoutParams(-1,-1));
+        setContentView(root);
         // Target 35 draws edge-to-edge: keep controls clear of system bars and keyboard.
-        web.setOnApplyWindowInsetsListener((v, insets) -> {
+        root.setOnApplyWindowInsetsListener((v, insets) -> {
             v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
                 insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
             return insets;
