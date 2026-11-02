@@ -14,3 +14,5 @@ Icon: Create a premium Android app launcher icon using the user reference's gold
 Poster: Finished vertical Chinese Android app poster, premium oxblood red and champagne gold, cream typography, matching golden bull, phone product mockup explicitly labelled 界面示意. Text: niu / 基金日记 / 把每一笔，记清楚。 / 暖红新装 · 安卓离线记账 / 确认前后，一眼看清 / 交易与日记，一起留下 / 本机保存，完整备份 / 免费下载安装 / GitHub · WeipingWu2023 / niu / 个人基金记录工具 · 非交易平台 · 不承诺投资收益. Mock holding value 1710.00, cost 2000.00, unrealized -290.00. No QR code or app-store endorsement.
 
 Final edit prompt: Preserve the red/gold poster and bull, replace the title with large lowercase niu and smaller descriptor 基金日记, use niu as phone heading, change GitHub path to WeipingWu2023 / niu, replace the mock phone's 定投 label with 加仓. Preserve all other feature text and the non-promissory footer.
+
+Rounded icon edit: Preserve the bull, expression, framing, red shirt and oxblood background. Change only the outer silhouette to a rounded square with 22% corner radius and genuine alpha transparency outside all four corners. No border, outside shadow, text, painted checkerboard or redesign. Keep horn tips inside the icon. Output square RGBA.

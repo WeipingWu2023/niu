@@ -8,6 +8,10 @@
 
 应用离线运行，无联网、交易账户、联系人或广泛存储权限。WebView 加载打包到 APK 的网页，备份与恢复使用系统文件选择器。网页与 App 的账本独立：先从网页导出 JSON，再在 App 中恢复。卸载或清理 App 数据前务必备份。
 
+安卓模拟器实测截图（含正常备份成功提示）：
+
+<img src="docs/screenshots/niu-android.png" width="320" alt="niu 安卓持仓总览实测截图">
+
 ## 安卓开发与发布
 
 运行 `npm run android:prepare` 同步网页资源，再使用 JDK17、Gradle8.9、Android SDK35 执行 `gradle -p android assembleRelease`。GitHub Actions 负责编译与测试；签名留在本机，见 [发布签名说明](RELEASE_SIGNING.md)。技术依据：[本地 WebView 内容](https://developer.android.com/develop/ui/views/layout/webapps/load-local-content)、[AGP8.7兼容要求](https://developer.android.com/build/releases/agp-8-7-0-release-notes)、[系统文档选择器](https://developer.android.com/training/data-storage/shared/documents-files)。
