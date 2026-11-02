@@ -1,0 +1,42 @@
+name: Android release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm test
+      - run: node --check app.js && node scripts/prepare-android.js
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.9'}
+      - name: Build unsigned release and device tests
+        run: |
+          gradle -p android assembleRelease lintRelease assembleDebug assembleDebugAndroidTest
+          mkdir -p release
+          cp android/app/build/outputs/apk/release/app-release-unsigned.apk release/niu-1.1.0-unsigned.apk
+          cp assets/poster.png release/niu-poster.png
+      - name: Enable hardware acceleration
+        run: |
+          sudo chmod 666 /dev/kvm
+      - name: Android device smoke tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          script: bash scripts/android-smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: niu-android, path: release/}
