@@ -10,17 +10,8 @@ android {
         versionName '1.1.0'
         testInstrumentationRunner 'cn.weiping.funddiary.SmokeTest'
     }
-    signingConfigs {
-        release {
-            if (System.getenv('ANDROID_KEYSTORE_PATH')) {
-                storeFile file(System.getenv('ANDROID_KEYSTORE_PATH'))
-                storePassword System.getenv('ANDROID_STORE_PASSWORD')
-                keyAlias 'funddiary'
-                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
-            }
-        }
-    }
-    buildTypes { release { signingConfig signingConfigs.release; minifyEnabled false } }
+    // Release APK is signed locally after CI. Private keys never leave the publisher's computer.
+    buildTypes { release { minifyEnabled false } }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }
 dependencies { implementation 'androidx.webkit:webkit:1.12.1' }
