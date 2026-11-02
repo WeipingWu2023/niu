@@ -9,7 +9,7 @@
   click('[data-action=transaction]');
   await submit({receipt:'ci-first',submittedAt:'2025-01-01T10:00',amount:'1200',fee:'0',status:'pending'});
   let db=JSON.parse(localStorage.getItem('fund-diary-v1-real'));
-  const core=await import('./core.js');assert(core.summary(db).totalCost===0n,'pending changed cost');
+  const core=await import(new URL('./core.js',location.href).href);assert(core.summary(db).totalCost===0n,'pending changed cost');
   click(`[data-edit="${db.transactions[0].id}"]`);
   await submit({status:'confirmed',actualNavDate:'2025-01-02',actualConfirmDate:'2025-01-03',nav:'1.2',shares:'1000',changeReason:'收到测试回执'});
   click('#modal [data-close]');click('[data-action=transaction]');

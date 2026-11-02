@@ -38,9 +38,27 @@ public class SmokeTest extends Instrumentation {
             runOnMainSync(() -> web.reload());
             await("document.body.innerText.includes('1710.00') && document.body.innerText.includes('-290.00')");
             if(!"true".equals(js("document.documentElement.scrollWidth <= window.innerWidth"))) throw new Exception("Mobile horizontal overflow");
+            // Use the actual Android content provider, with only the picker selection mocked.
+            android.content.ContentValues values=new android.content.ContentValues();
+            values.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME,"niu-ci-backup.json");
+            values.put(android.provider.MediaStore.MediaColumns.MIME_TYPE,"application/json");
+            android.net.Uri backupUri=getTargetContext().getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI,values);
+            if(backupUri==null) throw new Exception("Cannot create test backup document");
+            android.content.IntentFilter filter=new android.content.IntentFilter(Intent.ACTION_CREATE_DOCUMENT);
+            filter.addCategory(Intent.CATEGORY_OPENABLE);filter.addDataType("application/json");
+            ActivityMonitor monitor=addMonitor(filter,new ActivityResult(Activity.RESULT_OK,new Intent().setData(backupUri)),true);
+            js("document.querySelector('[data-action=backup]').click()");
+            await("document.getElementById('toast').innerText.includes('备份已保存')");
+            removeMonitor(monitor);
+            try(java.io.InputStream in=getTargetContext().getContentResolver().openInputStream(backupUri)){
+                org.json.JSONObject saved=new org.json.JSONObject(new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8));
+                if(saved.getJSONObject("data").getJSONArray("transactions").length()!=2) throw new Exception("Native exported JSON lost transactions");
+            }
+            getTargetContext().getContentResolver().delete(backupUri,null,null);
+            js("document.getElementById('toast').style.display='none'");
             File screenshots=new File(getTargetContext().getExternalFilesDir(null),"screenshots");screenshots.mkdirs();
             try(FileOutputStream out=new FileOutputStream(new File(screenshots,"niu-android.png"))){getUiAutomation().takeScreenshot().compress(Bitmap.CompressFormat.PNG,100,out);}
-            result.putString("stream","NIU_SMOKE_PASS: pending/confirmed ledger, NAV, simulator, JSON replay, mobile width, refresh persistence\n");
+            result.putString("stream","NIU_SMOKE_PASS: pending/confirmed ledger, NAV, simulator, JSON replay, mobile width, refresh persistence, native JSON export\n");
             finish(Activity.RESULT_OK,result);
         } catch(Exception e){result.putString("stream","NIU_SMOKE_FAIL: "+e);finish(Activity.RESULT_CANCELED,result);}
     }
