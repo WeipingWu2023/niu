@@ -3,6 +3,7 @@
 采用内置 imagegen；未使用 API/CLI 后备模式。参考用户提供的金黄色牛形截图，电影名称未作为事实核实或官方合作声明。
 
 - `assets/icon-master.png`：金黄色牛形肖像，半垂眼、浅色宽鼻、斑点弯角、红衬衫；深酒红背景。手机图标由 Android 自适应图标遮罩，应用内采用圆角四边形。
+- `assets/icon-rounded.png`：imagegen 精确编辑圆角四边形外轮廓，角外实际透明。192/512像素与旧式桌面图标由此仅缩放生成；自适应图标保留原始全幅画面。
 - `assets/icon-192.png`、`assets/icon-512.png` 及 Android mipmap：原图仅作标准尺寸缩放，用于打包。
 - `assets/poster.png`：最终 niu 竖版宣传海报。手机画面是生成示意，非真实截图，已明确标注。
 
