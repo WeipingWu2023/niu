@@ -37,7 +37,7 @@ public class SmokeTest extends Instrumentation {
             js(script); await("window.__qaResult === 'PASS'");
             runOnMainSync(() -> web.reload());
             await("document.body.innerText.includes('1710.00') && document.body.innerText.includes('-290.00')");
-            if(!"true".equals(js("document.documentElement.scrollWidth <= window.innerWidth"))) throw new Exception("Mobile horizontal overflow");
+            if(!"true".equals(js("document.documentElement.scrollWidth <= window.innerWidth"))) throw new Exception("Mobile horizontal overflow: "+js("JSON.stringify({viewport:innerWidth,document:document.documentElement.scrollWidth,offenders:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+0.5).slice(0,12).map(e=>({tag:e.tagName,class:e.className,width:e.getBoundingClientRect().width,right:e.getBoundingClientRect().right,text:e.innerText?.slice(0,50)}))})"));
             // Use the actual Android content provider, with only the picker selection mocked.
             android.content.ContentValues values=new android.content.ContentValues();
             values.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME,"niu-ci-backup.json");
